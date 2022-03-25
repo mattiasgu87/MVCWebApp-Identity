@@ -45,6 +45,7 @@ namespace MVCWebApp
             services.AddScoped<IProjectRepository, MockProjectRepository>(); //add repository
             services.AddScoped<IPersonRepository, PersonRepository>(); //add repository
             services.AddHttpContextAccessor();
+            services.AddRazorPages();
             services.AddSession();
         }
 
@@ -96,6 +97,7 @@ namespace MVCWebApp
                     name: "Personlist",
                     pattern: "Personlist",
                     defaults: new { controller = "AjaxController", action = "Index" });
+                endpoints.MapRazorPages();
             });
 
         }

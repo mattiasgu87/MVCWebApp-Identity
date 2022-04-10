@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using MVCWebApp.Data;
 using MVCWebApp.Models;
@@ -12,6 +13,7 @@ using System.Threading.Tasks;
 
 namespace MVCWebApp.Controllers
 {
+    [Authorize]
     public class PersonController : Controller
     {
         private readonly IPersonRepository _personRepository;
@@ -125,6 +127,7 @@ namespace MVCWebApp.Controllers
             return View(nameof(Index), model);
         }
 
+        [Authorize(Roles = "admin")]
         public IActionResult Delete(int id)
         {
             _personRepository.Delete(id);

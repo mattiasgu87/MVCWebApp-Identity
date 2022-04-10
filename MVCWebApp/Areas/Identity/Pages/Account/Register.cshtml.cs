@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Text.Encodings.Web;
@@ -61,6 +62,22 @@ namespace MVCWebApp.Areas.Identity.Pages.Account
             [Display(Name = "Confirm password")]
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
             public string ConfirmPassword { get; set; }
+
+            [Required]
+            [StringLength(20, MinimumLength = 2)]
+            [Display(Name = "First Name")]
+            public string FirstName { get; set; }
+
+            [Required]
+            [StringLength(20, MinimumLength = 2)]
+            [Display(Name = "Last Name")]
+            public string LastName { get; set; }
+
+            [Required]
+            [RegularExpression(@"(^((((0[1-9])|([1-2][0-9])|(3[0-1]))|([1-9]))\x2F(((0[1-9])|(1[0-2]))|([1-9]))\x2F(([0-9]{2})|(((19)|([2]([0]{1})))([0-9]{2}))))$)",
+            ErrorMessage = "Please enter a valid birth date! example: dd/mm/yyyy")]
+            [Display(Name = "Birth Date")]
+            public string BirthDate { get; set; }
         }
 
         public async Task OnGetAsync(string returnUrl = null)
@@ -73,9 +90,14 @@ namespace MVCWebApp.Areas.Identity.Pages.Account
         {
             returnUrl = returnUrl ?? Url.Content("~/");
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = Input.Email, Email = Input.Email };
+                //convert birthdate to datetime
+                DateTime.TryParse(Input.BirthDate, out DateTime birthDate);
+
+                var user = new ApplicationUser { UserName = Input.Email, Email = Input.Email,
+                    FirstName = Input.FirstName, LastName = Input.LastName, BirthDate = birthDate };
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 if (result.Succeeded)
                 {
@@ -106,8 +128,7 @@ namespace MVCWebApp.Areas.Identity.Pages.Account
                 {
                     ModelState.AddModelError(string.Empty, error.Description);
                 }
-            }
-
+            }     
             // If we got this far, something failed, redisplay form
             return Page();
         }

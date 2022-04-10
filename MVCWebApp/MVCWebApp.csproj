@@ -31,6 +31,8 @@
     <Compile Remove="Migrations\20220318170449_Added seeded data to Language and PersonLanguage.Designer.cs" />
     <Compile Remove="Migrations\20220318171111_Added seeded data to Language.cs" />
     <Compile Remove="Migrations\20220318171111_Added seeded data to Language.Designer.cs" />
+    <Compile Remove="Migrations\20220410191542_Seeding for roles &amp; users.cs" />
+    <Compile Remove="Migrations\20220410191542_Seeding for roles &amp; users.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

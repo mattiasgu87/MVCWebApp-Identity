@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using MVCWebApp.Data;
 using MVCWebApp.Models;
 using MVCWebApp.Models.City;
@@ -11,6 +12,7 @@ using System.Threading.Tasks;
 
 namespace MVCWebApp.Controllers
 {
+    [Authorize(Roles = "admin")]
     public class CountryController : Controller
     {
         public readonly ApplicationDbContext _context;

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using MVCWebApp.Models;
 using MVCWebApp.Models.City;
@@ -91,6 +92,71 @@ namespace MVCWebApp.Data
                 new PersonLanguage { PersonId = 1, LanguageName = "Franska" },
                 new PersonLanguage { PersonId = 2, LanguageName = "Polska" },
                 new PersonLanguage { PersonId = 3, LanguageName = "Italienska" });
+
+            //seeding roles
+            string adminRoleId = Guid.NewGuid().ToString();
+            string userRoleId = Guid.NewGuid().ToString();
+
+            modelBuilder.Entity<IdentityRole>().HasData(new IdentityRole
+            {
+                Id = adminRoleId,
+                Name = "admin",
+                NormalizedName = "ADMIN"
+            });
+
+            modelBuilder.Entity<IdentityRole>().HasData(new IdentityRole
+            {
+                Id = userRoleId,
+                Name = "user",
+                NormalizedName = "USER"
+            });
+
+            //seeding users
+            string adminId = Guid.NewGuid().ToString();
+            DateTime adminBirthdate = new DateTime(1980, 1, 1);
+
+            string userId = Guid.NewGuid().ToString();           
+            DateTime userBirthdate = new DateTime(1990, 12, 12);
+
+            PasswordHasher<ApplicationUser> pwHasher = new PasswordHasher<ApplicationUser>();
+
+            modelBuilder.Entity<ApplicationUser>().HasData(
+                new ApplicationUser
+                {
+                    Id = adminId, 
+                    Email = "admin@adminmvc.com",
+                    NormalizedEmail = "ADMIN@ADMINMVC.COM",
+                    UserName = "admin@adminmvc.com",
+                    NormalizedUserName = "ADMIN@ADMINMVC.COM",
+                    FirstName = "Admin",
+                    LastName = "Adminsson",
+                    PasswordHash = pwHasher.HashPassword(null, "password"),
+                    BirthDate = adminBirthdate
+                },
+                new ApplicationUser
+                {
+                    Id = userId,
+                    Email = "user@usermvc.com",
+                    NormalizedEmail = "USER@USERMVC.COM", 
+                    UserName = "user@usermvc.com",
+                    NormalizedUserName = "USER@USERMVC.COM",
+                    FirstName = "Adam", 
+                    LastName = "Adamsson", 
+                    PasswordHash = pwHasher.HashPassword(null, "PASSWORD"), 
+                    BirthDate = userBirthdate
+                });
+
+            modelBuilder.Entity<IdentityUserRole<string>>().HasData(
+                new IdentityUserRole<string> 
+                { 
+                    RoleId = adminRoleId, 
+                    UserId = adminId 
+                }, 
+                new IdentityUserRole<string> 
+                {
+                    RoleId = userRoleId, 
+                    UserId = userId 
+                });
             #endregion
         }
     }

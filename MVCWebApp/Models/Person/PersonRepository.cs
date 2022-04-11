@@ -1,4 +1,5 @@
-﻿using MVCWebApp.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using MVCWebApp.Data;
 using MVCWebApp.Models.Person.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -112,6 +113,31 @@ namespace MVCWebApp.Models.Person
                     return true;
                 }
             }
+            return false;
+        }
+
+        public bool Edit(int? id, EditPersonViewModel editViewModel)
+        {
+            if (id != null)
+            {
+                var personToEdit = _context.People.Find(id);
+
+                if (personToEdit != null)
+                {
+                    personToEdit.Name = editViewModel.Name;
+                    personToEdit.PhoneNumber = editViewModel.PhoneNumber;
+
+                    City.City city = _context.Cities.Find(editViewModel.City);
+
+                    personToEdit.City = city;
+
+                    _context.Entry(personToEdit).State = EntityState.Modified;
+
+                    _context.SaveChanges();
+                    return true;
+                }
+            }
+
             return false;
         }
     }

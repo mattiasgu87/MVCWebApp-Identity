@@ -140,6 +140,35 @@ namespace MVCWebApp.Controllers
         }
 
         [HttpGet]
+        public IActionResult Edit(int id)
+        {
+            Person person = _context.People.Find(id);
+
+            EditPersonViewModel model = new EditPersonViewModel();
+            model.CityList = new SelectList(_context.Cities, "ID", "CityName", person.City);
+            model.City = person.City.ID;
+            model.Name = person.Name;
+            model.PhoneNumber = person.PhoneNumber;
+            model.ID = person.ID;
+
+            return View(model);
+        }
+
+        [HttpPost]
+        public IActionResult Edit(int? ID, EditPersonViewModel editModel)
+        {
+            if (ID != null)
+            {
+                if (ModelState.IsValid)
+                {
+                    _personRepository.Edit(ID, editModel);
+                }
+            }
+
+            return RedirectToAction("Index");
+        }
+
+        [HttpGet]
         public IActionResult Search(SearchPersonViewModel searchOptions)
         {
 

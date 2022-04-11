@@ -12,6 +12,7 @@ namespace MVCWebApp.Models.Person
         public Person GetPerson(int id);
         public Person Add(CreatePersonViewModel createPersonViewModel);
         public bool Delete(int id);
+        public bool Edit(int? id, EditPersonViewModel editPersonViewModel);
         public List<Person> Search(string searchTerm, bool caseSensitive);
         public List<Person> Sort(SortOptionsViewModel sortOptions, string sortType);
 

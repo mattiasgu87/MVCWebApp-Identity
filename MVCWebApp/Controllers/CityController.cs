@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using MVCWebApp.Data;
 using MVCWebApp.Models;
 using MVCWebApp.Models.City;
@@ -85,6 +86,44 @@ namespace MVCWebApp.Controllers
             }
 
             return RedirectToAction(nameof(Index));
+        }
+
+        [HttpGet]
+        public IActionResult Edit(int id)
+        {
+            City city = _context.Cities.Find(id);
+
+            if (city == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                EditCityViewModel editCityViewModel = new EditCityViewModel { CityId = city.ID, CityName = city.CityName, CountryName = city.Country.CountryName, CountryList = new SelectList(_context.Countries, "CountryName", "CountryName", city.Country.CountryName) };
+                return View(editCityViewModel);
+            }
+        }
+
+        [HttpPost]
+        public IActionResult Edit(EditCityViewModel editCityViewModel)
+        {
+            //måste ha riktigt id på countries annars går det inte att ändra namnet..
+            if (editCityViewModel != null)
+            {
+                City city = _context.Cities.Find(editCityViewModel.CityId);
+
+                if (city != null)
+                {
+                    city.CityName = editCityViewModel.CityName;
+                    city.Country = _context.Countries.Find(editCityViewModel.CountryName);
+
+                    _context.Entry(city).State = EntityState.Modified;
+                    _context.SaveChanges();
+
+                    return RedirectToAction("Index");
+                }
+            }
+            return NotFound();
         }
     }
 }

@@ -1,9 +1,10 @@
-﻿@model EditCountryViewModel 
+﻿@model Country 
 
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Edit" method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="CountryId" />
             <div class="form-group">
                 <label asp-for="CountryName" class="control-label"></label>
                 <input asp-for="CountryName" class="form-control" />

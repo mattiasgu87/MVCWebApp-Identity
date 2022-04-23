@@ -33,7 +33,7 @@ namespace MVCWebApp.Data
 
             //Foreign key shadow properties
             modelBuilder.Entity<City>()
-                .Property<string>("CountryForeignKey");
+                .Property<int>("CountryForeignKey");
             modelBuilder.Entity<Person>()
                 .Property<int>("CityForeignKey");
 
@@ -65,15 +65,15 @@ namespace MVCWebApp.Data
             #region seeding
             //seeding countries
             modelBuilder.Entity<Country>().HasData(
-                new Country { CountryName = "Sverige" },
-                new Country { CountryName = "Norge" },
-                new Country { CountryName = "Danmark" });
+                new Country { CountryId = 1, CountryName = "Sverige" },
+                new Country { CountryId = 2, CountryName = "Norge" },
+                new Country { CountryId = 3, CountryName = "Danmark" });
 
             //seeding cities
             modelBuilder.Entity<City>().HasData(
-            new { ID = 1, CityName = "Stockholm", CountryForeignKey = "Sverige" },
-            new { ID = 2, CityName = "Oslo", CountryForeignKey = "Norge" },
-            new { ID = 3, CityName = "Köpenhamn", CountryForeignKey = "Danmark" });
+            new { ID = 1, CityName = "Stockholm", CountryForeignKey = 1 },
+            new { ID = 2, CityName = "Oslo", CountryForeignKey = 2 },
+            new { ID = 3, CityName = "Köpenhamn", CountryForeignKey = 3 });
 
             //seeding languages
             modelBuilder.Entity<Language>().HasData(

@@ -28,7 +28,7 @@ namespace MVCWebApp.Controllers
         {
             CombinedCityViewModel model = new CombinedCityViewModel();
             model.CityList = _context.Cities.OrderBy(c => c.Country).ToList();
-            model.CountryList = new SelectList(_context.Countries, "CountryName", "CountryName");
+            model.CountryList = new SelectList(_context.Countries, "CountryId", "CountryName");
 
             return View(model);
         }
@@ -38,11 +38,11 @@ namespace MVCWebApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                if (_context.Countries.Find(CreateCityViewModel.CountryName).Cities.Find(c => c.CityName == CreateCityViewModel.CityName) == null)
+                if (_context.Countries.Find(CreateCityViewModel.CountryId).Cities.Find(c => c.CityName == CreateCityViewModel.CityName) == null)
                 {
                     City city = new City();
                     city.CityName = CreateCityViewModel.CityName;
-                    Country country = _context.Countries.Find(CreateCityViewModel.CountryName);
+                    Country country = _context.Countries.Find(CreateCityViewModel.CountryId);
 
                     city.Country = country;
                     country.Cities.Add(city);
@@ -99,7 +99,7 @@ namespace MVCWebApp.Controllers
             }
             else
             {
-                EditCityViewModel editCityViewModel = new EditCityViewModel { CityId = city.ID, CityName = city.CityName, CountryName = city.Country.CountryName, CountryList = new SelectList(_context.Countries, "CountryName", "CountryName", city.Country.CountryName) };
+                EditCityViewModel editCityViewModel = new EditCityViewModel { CityId = city.ID, CityName = city.CityName, CountryId = city.Country.CountryId, CountryList = new SelectList(_context.Countries, "CountryId", "CountryName", city.Country.CountryId) };
                 return View(editCityViewModel);
             }
         }
@@ -115,7 +115,7 @@ namespace MVCWebApp.Controllers
                 if (city != null)
                 {
                     city.CityName = editCityViewModel.CityName;
-                    city.Country = _context.Countries.Find(editCityViewModel.CountryName);
+                    city.Country = _context.Countries.Find(editCityViewModel.CountryId);
 
                     _context.Entry(city).State = EntityState.Modified;
                     _context.SaveChanges();

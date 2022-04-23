@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MVCWebApp.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20220325173342_Added Identity")]
-    partial class AddedIdentity
+    [Migration("20220423102133_new initial creation of database due to new key for country")]
+    partial class newinitialcreationofdatabaseduetonewkeyforcountry
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -29,6 +29,9 @@ namespace MVCWebApp.Migrations
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
 
+                    b.Property<DateTime>("BirthDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
@@ -39,6 +42,14 @@ namespace MVCWebApp.Migrations
 
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
@@ -84,6 +95,46 @@ namespace MVCWebApp.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "0324138a-f059-4929-9823-187defddb3fc",
+                            AccessFailedCount = 0,
+                            BirthDate = new DateTime(1980, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ConcurrencyStamp = "45044a22-f786-43d8-8fe6-0c8420b66719",
+                            Email = "admin@adminmvc.com",
+                            EmailConfirmed = false,
+                            FirstName = "Admin",
+                            LastName = "Adminsson",
+                            LockoutEnabled = false,
+                            NormalizedEmail = "ADMIN@ADMINMVC.COM",
+                            NormalizedUserName = "ADMIN@ADMINMVC.COM",
+                            PasswordHash = "AQAAAAEAACcQAAAAEHtaDQVrrxCB2rb6Y2tmLC+B9hfqOAYerKm7jV3XEJSv9thhRpzGUZ3AcDfa399Bmw==",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "eeba8447-f1fa-4cbc-bc3a-b0a9a0835341",
+                            TwoFactorEnabled = false,
+                            UserName = "admin@adminmvc.com"
+                        },
+                        new
+                        {
+                            Id = "f7ea4ca2-15d1-4323-bf28-cfdf6445340b",
+                            AccessFailedCount = 0,
+                            BirthDate = new DateTime(1990, 12, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ConcurrencyStamp = "187f9dda-a198-4131-b2c1-0d0addfc6f48",
+                            Email = "user@usermvc.com",
+                            EmailConfirmed = false,
+                            FirstName = "Adam",
+                            LastName = "Adamsson",
+                            LockoutEnabled = false,
+                            NormalizedEmail = "USER@USERMVC.COM",
+                            NormalizedUserName = "USER@USERMVC.COM",
+                            PasswordHash = "AQAAAAEAACcQAAAAECrwE40QB/yRPdGrJ+Ov+OrhyNdnGfYAFYmSbiaoEQl3a2+yl6I+TMD8vrb0eZ/JSA==",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "76eb99cb-3194-4c7c-a372-953986a6f953",
+                            TwoFactorEnabled = false,
+                            UserName = "user@usermvc.com"
+                        });
                 });
 
             modelBuilder.Entity("MVCWebApp.Models.City.City", b =>
@@ -97,8 +148,8 @@ namespace MVCWebApp.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("CountryForeignKey")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int>("CountryForeignKey")
+                        .HasColumnType("int");
 
                     b.HasKey("ID");
 
@@ -111,42 +162,50 @@ namespace MVCWebApp.Migrations
                         {
                             ID = 1,
                             CityName = "Stockholm",
-                            CountryForeignKey = "Sverige"
+                            CountryForeignKey = 1
                         },
                         new
                         {
                             ID = 2,
                             CityName = "Oslo",
-                            CountryForeignKey = "Norge"
+                            CountryForeignKey = 2
                         },
                         new
                         {
                             ID = 3,
                             CityName = "Köpenhamn",
-                            CountryForeignKey = "Danmark"
+                            CountryForeignKey = 3
                         });
                 });
 
             modelBuilder.Entity("MVCWebApp.Models.Country.Country", b =>
                 {
-                    b.Property<string>("CountryName")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int>("CountryId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.HasKey("CountryName");
+                    b.Property<string>("CountryName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("CountryId");
 
                     b.ToTable("Countries");
 
                     b.HasData(
                         new
                         {
+                            CountryId = 1,
                             CountryName = "Sverige"
                         },
                         new
                         {
+                            CountryId = 2,
                             CountryName = "Norge"
                         },
                         new
                         {
+                            CountryId = 3,
                             CountryName = "Danmark"
                         });
                 });
@@ -281,6 +340,22 @@ namespace MVCWebApp.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "aa7d89ee-ad7c-4821-9a54-44bc73673f15",
+                            ConcurrencyStamp = "2173d2e3-4100-4c27-9e8a-9d2b40dbff07",
+                            Name = "admin",
+                            NormalizedName = "ADMIN"
+                        },
+                        new
+                        {
+                            Id = "e6c8058e-a5ef-4986-b3bb-6096ccccfcb5",
+                            ConcurrencyStamp = "8deb2d74-a4a4-42b3-849d-77b0c3501aee",
+                            Name = "user",
+                            NormalizedName = "USER"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -366,6 +441,18 @@ namespace MVCWebApp.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetUserRoles");
+
+                    b.HasData(
+                        new
+                        {
+                            UserId = "0324138a-f059-4929-9823-187defddb3fc",
+                            RoleId = "aa7d89ee-ad7c-4821-9a54-44bc73673f15"
+                        },
+                        new
+                        {
+                            UserId = "f7ea4ca2-15d1-4323-bf28-cfdf6445340b",
+                            RoleId = "e6c8058e-a5ef-4986-b3bb-6096ccccfcb5"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>

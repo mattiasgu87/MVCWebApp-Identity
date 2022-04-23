@@ -36,7 +36,8 @@ namespace MVCWebApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                if(_context.Countries.Find(CreateViewModel.CountryName) == null)
+
+                if(_context.Countries.FirstOrDefault(cou => cou.CountryName == CreateViewModel.CountryName) == null)
                 {
                     Country country = new Country();
                     country.CountryName = CreateViewModel.CountryName;
@@ -62,7 +63,7 @@ namespace MVCWebApp.Controllers
             return View(nameof(Index), model);
         }
 
-        public IActionResult Delete(string id)
+        public IActionResult Delete(int id)
         {
             Country countryToDelete = _context.Countries.Find(id);
 
@@ -86,7 +87,7 @@ namespace MVCWebApp.Controllers
         }
 
         [HttpGet]
-        public IActionResult Edit(string id)
+        public IActionResult Edit(int id)
         {
             Country country = _context.Countries.Find(id);
 
@@ -95,31 +96,28 @@ namespace MVCWebApp.Controllers
                 return NotFound();
             }
             else
-            {
-                EditCountryViewModel editCountryViewModel = new EditCountryViewModel { CountryName = country.CountryName };
-                return View(editCountryViewModel);
+            {               
+                return View(country);
             }
         }
 
         [HttpPost]
-        public IActionResult Edit(string id, EditCountryViewModel editCountryViewModel)
+        public IActionResult Edit(Country country)
         {
-            //måste ha riktigt id på countries annars går det inte att ändra namnet..
-            if (editCountryViewModel != null)
+
+            if (country != null)
             {
-                Country country = _context.Countries.Find(id);
-
-                if (country != null)
+                if (ModelState.IsValid)
                 {
-                    country.CountryName = editCountryViewModel.CountryName;
-
                     _context.Entry(country).State = EntityState.Modified;
                     _context.SaveChanges();
-
                     return RedirectToAction("Index");
                 }
+                else
+                    return View(country);
             }
-            return NotFound();          
+            else
+                return NotFound();
         }
     }
 }

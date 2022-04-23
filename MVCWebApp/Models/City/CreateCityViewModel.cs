@@ -13,7 +13,7 @@ namespace MVCWebApp.Models.City
         [Display(Name = "City Name")]
         public string CityName { get; set; }
         [Required]
-        [Display(Name = "Country Name")]
-        public string CountryName { get; set; }
+        [Display(Name = "Country")]
+        public int CountryId { get; set; }
     }
 }

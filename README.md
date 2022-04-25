@@ -1,5 +1,4 @@
 # MVCWebApp
 MVC Web App Assignment [Lexicon.Net]
 
-Contains custom routes:
-/Doctor & /GuessingGame
+Updated MVC Web App to include Authorization with roles

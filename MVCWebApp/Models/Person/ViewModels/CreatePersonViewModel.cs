@@ -13,6 +13,7 @@ namespace MVCWebApp.Models.Person.ViewModels
         public string Name { get; set; }
 
         [Required]
+        [Range(1, int.MaxValue, ErrorMessage = "A city must be selected!")]
         public int City { get; set; }
 
         [Required]

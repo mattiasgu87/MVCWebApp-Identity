@@ -1,0 +1,20 @@
+﻿@{
+    ViewData["Title"] = "Create role";
+}
+
+<h1>Create role</h1>
+
+@if (ViewBag.errorMessage != null)
+{
+    <p>@ViewBag.errorMessage</p>
+}
+
+<form asp-action="Create" method="post">
+    <label>Role name:</label>
+    <input type="text" name="name" />
+    <input type="submit" value="Create role" class="btn btn-primary" />
+</form>
+
+<div>
+    <a asp-action="Index">Back to role index</a>
+</div>

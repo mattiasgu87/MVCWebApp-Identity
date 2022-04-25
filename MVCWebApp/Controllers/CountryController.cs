@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using MVCWebApp.Data;
 using MVCWebApp.Models;
 using MVCWebApp.Models.City;
@@ -11,6 +13,7 @@ using System.Threading.Tasks;
 
 namespace MVCWebApp.Controllers
 {
+    [Authorize(Roles = "admin")]
     public class CountryController : Controller
     {
         public readonly ApplicationDbContext _context;
@@ -29,11 +32,13 @@ namespace MVCWebApp.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult Create(CountryViewModel CreateViewModel)
         {
             if (ModelState.IsValid)
             {
-                if(_context.Countries.Find(CreateViewModel.CountryName) == null)
+
+                if(_context.Countries.FirstOrDefault(cou => cou.CountryName == CreateViewModel.CountryName) == null)
                 {
                     Country country = new Country();
                     country.CountryName = CreateViewModel.CountryName;
@@ -59,7 +64,7 @@ namespace MVCWebApp.Controllers
             return View(nameof(Index), model);
         }
 
-        public IActionResult Delete(string id)
+        public IActionResult Delete(int id)
         {
             Country countryToDelete = _context.Countries.Find(id);
 
@@ -80,6 +85,41 @@ namespace MVCWebApp.Controllers
             }
 
             return RedirectToAction(nameof(Index));
+        }
+
+        [HttpGet]
+        public IActionResult Edit(int id)
+        {
+            Country country = _context.Countries.Find(id);
+
+            if(country == null)
+            {
+                return NotFound();
+            }
+            else
+            {               
+                return View(country);
+            }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Edit(Country country)
+        {
+
+            if (country != null)
+            {
+                if (ModelState.IsValid)
+                {
+                    _context.Entry(country).State = EntityState.Modified;
+                    _context.SaveChanges();
+                    return RedirectToAction("Index");
+                }
+                else
+                    return View(country);
+            }
+            else
+                return NotFound();
         }
     }
 }

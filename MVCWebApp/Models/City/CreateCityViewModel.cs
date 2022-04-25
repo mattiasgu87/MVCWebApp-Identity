@@ -13,7 +13,8 @@ namespace MVCWebApp.Models.City
         [Display(Name = "City Name")]
         public string CityName { get; set; }
         [Required]
-        [Display(Name = "Country Name")]
-        public string CountryName { get; set; }
+        [Range(1, int.MaxValue, ErrorMessage = "A country must be selected!")]
+        [Display(Name = "Country")]
+        public int CountryId { get; set; }
     }
 }

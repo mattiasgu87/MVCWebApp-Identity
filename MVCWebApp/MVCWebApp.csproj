@@ -31,6 +31,8 @@
     <Compile Remove="Migrations\20220318170449_Added seeded data to Language and PersonLanguage.Designer.cs" />
     <Compile Remove="Migrations\20220318171111_Added seeded data to Language.cs" />
     <Compile Remove="Migrations\20220318171111_Added seeded data to Language.Designer.cs" />
+    <Compile Remove="Migrations\20220410191542_Seeding for roles &amp; users.cs" />
+    <Compile Remove="Migrations\20220410191542_Seeding for roles &amp; users.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -39,17 +41,22 @@
 
   <ItemGroup>
     <PackageReference Include="jQuery" Version="3.6.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.23" />
-    <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="3.1.23" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.21" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="3.1.21" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.23" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="3.1.23" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.23" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.23">
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.21" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.21">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.Extensions.Identity.Core" Version="3.1.23" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.5" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Areas\Identity\Data\" />
+    <Folder Include="Migrations\" />
   </ItemGroup>
 
 </Project>

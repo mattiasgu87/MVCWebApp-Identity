@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using MVCWebApp.Data;
 using MVCWebApp.Models;
 using MVCWebApp.Models.Language;
@@ -10,6 +11,7 @@ using System.Threading.Tasks;
 
 namespace MVCWebApp.Controllers
 {
+    [Authorize(Roles = "admin")] //not in assigment but figured it should be restricted
     public class LanguageController : Controller
     {
         public readonly ApplicationDbContext _context;

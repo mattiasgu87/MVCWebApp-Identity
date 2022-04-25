@@ -9,6 +9,7 @@ namespace MVCWebApp.Models.Person.ViewModels
 {
     public class EditPersonViewModel
     {
+        [Required]
         public int ID { get; set; }
         [Required]
         [StringLength(40, MinimumLength = 2)]
@@ -19,6 +20,8 @@ namespace MVCWebApp.Models.Person.ViewModels
         [StringLength(15, MinimumLength = 7)]
         [Display(Name = "Phone Number")]
         public string PhoneNumber { get; set; }
+        [Required]
+        [Range(1, int.MaxValue, ErrorMessage = "A city must be selected!")]
         public int City { get; set; }
         public SelectList CityList { get; set; }
         

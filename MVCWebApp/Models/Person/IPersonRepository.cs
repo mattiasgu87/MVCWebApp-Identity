@@ -13,6 +13,7 @@ namespace MVCWebApp.Models.Person
         public Person Add(CreatePersonViewModel createPersonViewModel);
         public bool Delete(int id);
         public bool Edit(int? id, EditPersonViewModel editPersonViewModel);
+        public bool Edit(EditPersonViewModel editPersonViewModel);
         public List<Person> Search(string searchTerm, bool caseSensitive);
         public List<Person> Sort(SortOptionsViewModel sortOptions, string sortType);
 

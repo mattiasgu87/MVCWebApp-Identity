@@ -95,11 +95,11 @@ namespace MVCWebApp.Controllers
 
                 PersonLanguage test = _context.PersonLanguages.First();
 
-                return RedirectToAction("Index");
+                return RedirectToAction(nameof(Index));
             }
             else
             {
-                //todo - improve in Identity assigment
+                //todo - improve
                 MessageViewModel messageModel = new MessageViewModel();
                 messageModel.Message = "Person already knows that language!";
 
@@ -114,7 +114,6 @@ namespace MVCWebApp.Controllers
         {
             if (ModelState.IsValid)
             {
-
                 _personRepository.Add(CreateViewModel);
 
                 return RedirectToAction(nameof(Index));
@@ -142,30 +141,33 @@ namespace MVCWebApp.Controllers
         [HttpGet]
         public IActionResult Edit(int id)
         {
-            Person person = _context.People.Find(id);
+            EditPersonViewModel editPersonViewModel = CreateEditPersonViewModel(id);
 
-            EditPersonViewModel model = new EditPersonViewModel();
-            model.CityList = new SelectList(_context.Cities, "ID", "CityName", person.City);
-            model.City = person.City.ID;
-            model.Name = person.Name;
-            model.PhoneNumber = person.PhoneNumber;
-            model.ID = person.ID;
-
-            return View(model);
+            if(editPersonViewModel == null)
+                return NotFound();
+            else
+                return View(editPersonViewModel);
         }
 
         [HttpPost]
-        public IActionResult Edit(int? ID, EditPersonViewModel editModel)
+        [ValidateAntiForgeryToken]
+        public IActionResult Edit(EditPersonViewModel editModel)
         {
-            if (ID != null)
+            if (editModel != null)
             {
                 if (ModelState.IsValid)
                 {
-                    _personRepository.Edit(ID, editModel);
+                    _personRepository.Edit(editModel);
+                }
+                else
+                {
+                    return View(CreateEditPersonViewModel(editModel.ID));
                 }
             }
+            else
+                return NotFound();
 
-            return RedirectToAction("Index");
+            return RedirectToAction(nameof(Index));
         }
 
         [HttpGet]
@@ -199,6 +201,23 @@ namespace MVCWebApp.Controllers
             model.CityList = new SelectList(_context.Cities, "CityName", "CityName");
 
             return View(nameof(Index), model);
+        }
+
+        private EditPersonViewModel CreateEditPersonViewModel(int personId)
+        {
+            Person person = _context.People.Find(personId);
+
+            if (person == null)
+                return null;
+
+            EditPersonViewModel model = new EditPersonViewModel();
+            model.CityList = new SelectList(_context.Cities, "ID", "CityName", person.City);
+            model.City = person.City.ID;
+            model.Name = person.Name;
+            model.PhoneNumber = person.PhoneNumber;
+            model.ID = person.ID;
+
+            return model;
         }
     }
 }

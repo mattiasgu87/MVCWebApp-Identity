@@ -48,14 +48,14 @@ li.linavigation a:hover {
     background-color: #111;
 }
 
-    li.linavigation button {
+li.linavigation button {
         display: block;
         color: black;
         background-color: white;
         text-align: center;
         padding: 14px 16px;
         text-decoration: none;
-    }
+}
 
 li.linavigation button:hover {       
         background-color: #333;

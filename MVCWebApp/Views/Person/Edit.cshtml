@@ -1,5 +1,8 @@
 ﻿@model EditPersonViewModel
 
+@{ ViewData["Title"] = "Edit Person"; }
+<h1>Edit Person</h1>
+
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Edit" method="post">
@@ -27,4 +30,8 @@
             </div>
         </form>
     </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to people</a>
 </div>

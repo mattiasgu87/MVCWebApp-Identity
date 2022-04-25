@@ -5,13 +5,13 @@
 
 <h1>Index</h1>
 
-@if (User.IsInRole("user"))
-{
-    <p>Your role is: user</p>
-}
-else if (User.IsInRole("admin"))
+@if (User.IsInRole("admin"))
 {
     <p>Your role is: admin</p>
+}
+else if (User.IsInRole("user"))
+{
+    <p>Your role is: user</p>
 }
 
 @if (ViewBag.Message != null)

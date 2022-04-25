@@ -137,7 +137,30 @@ namespace MVCWebApp.Models.Person
                     return true;
                 }
             }
+            return false;
+        }
 
+        public bool Edit(EditPersonViewModel editViewModel)
+        {
+            if (editViewModel != null)
+            {
+                var personToEdit = _context.People.Find(editViewModel.ID);
+
+                if (personToEdit != null)
+                {
+                    personToEdit.Name = editViewModel.Name;
+                    personToEdit.PhoneNumber = editViewModel.PhoneNumber;
+
+                    City.City city = _context.Cities.Find(editViewModel.City);
+
+                    personToEdit.City = city;
+
+                    _context.Entry(personToEdit).State = EntityState.Modified;
+
+                    _context.SaveChanges();
+                    return true;
+                }
+            }
             return false;
         }
     }

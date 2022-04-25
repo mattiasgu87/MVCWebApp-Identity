@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using MVCWebApp.Data;
 using MVCWebApp.Models;
 
 namespace MVCWebApp.Areas.Identity.Pages.Account.Manage
@@ -14,13 +15,16 @@ namespace MVCWebApp.Areas.Identity.Pages.Account.Manage
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly ApplicationDbContext _context;
 
         public IndexModel(
             UserManager<ApplicationUser> userManager,
-            SignInManager<ApplicationUser> signInManager)
+            SignInManager<ApplicationUser> signInManager,
+            ApplicationDbContext context)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _context = context;
         }
 
         public string Username { get; set; }
@@ -36,6 +40,22 @@ namespace MVCWebApp.Areas.Identity.Pages.Account.Manage
             [Phone]
             [Display(Name = "Phone number")]
             public string PhoneNumber { get; set; }
+
+            [Required]
+            [StringLength(20, MinimumLength = 2)]
+            [Display(Name = "First Name")]
+            public string FirstName { get; set; }
+
+            [Required]
+            [StringLength(20, MinimumLength = 2)]
+            [Display(Name = "Last Name")]
+            public string LastName { get; set; }
+
+            [Required]
+            [RegularExpression(@"(^((((0[1-9])|([1-2][0-9])|(3[0-1]))|([1-9]))\x2F(((0[1-9])|(1[0-2]))|([1-9]))\x2F(([0-9]{2})|(((19)|([2]([0]{1})))([0-9]{2}))))$)",
+            ErrorMessage = "Please enter a valid birth date! example: dd/mm/yyyy")]
+            [Display(Name = "Birth Date")]
+            public string BirthDate { get; set; }
         }
 
         private async Task LoadAsync(ApplicationUser user)
@@ -47,7 +67,7 @@ namespace MVCWebApp.Areas.Identity.Pages.Account.Manage
 
             Input = new InputModel
             {
-                PhoneNumber = phoneNumber
+                PhoneNumber = phoneNumber, FirstName = user.FirstName, LastName = user.LastName, BirthDate = user.BirthDate.ToString()
             };
         }
 
@@ -87,6 +107,11 @@ namespace MVCWebApp.Areas.Identity.Pages.Account.Manage
                     return RedirectToPage();
                 }
             }
+
+            //custom ApplicationUser fields-> todo-> make safer
+            user.FirstName = Input.FirstName;
+            user.LastName = Input.LastName;
+            _context.Users.Update(user);
 
             await _signInManager.RefreshSignInAsync(user);
             StatusMessage = "Your profile has been updated";

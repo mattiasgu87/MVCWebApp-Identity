@@ -34,6 +34,7 @@ namespace MVCWebApp.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult Create(CreateCityViewModel CreateCityViewModel)
         {
             if (ModelState.IsValid)
@@ -91,27 +92,22 @@ namespace MVCWebApp.Controllers
         [HttpGet]
         public IActionResult Edit(int id)
         {
-            City city = _context.Cities.Find(id);
+            EditCityViewModel editCityViewModel = CreateEditCityViewModel(id);
 
-            if (city == null)
-            {
+            if (editCityViewModel == null)
                 return NotFound();
-            }
             else
-            {
-                EditCityViewModel editCityViewModel = new EditCityViewModel { CityId = city.ID, CityName = city.CityName, CountryId = city.Country.CountryId, CountryList = new SelectList(_context.Countries, "CountryId", "CountryName", city.Country.CountryId) };
                 return View(editCityViewModel);
-            }
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult Edit(EditCityViewModel editCityViewModel)
         {
             if (editCityViewModel != null)
             {
                 if (ModelState.IsValid)
                 {
-
                     City city = _context.Cities.Find(editCityViewModel.CityId);
 
                     if (city != null)
@@ -122,13 +118,35 @@ namespace MVCWebApp.Controllers
                         _context.Entry(city).State = EntityState.Modified;
                         _context.SaveChanges();
 
-                        return RedirectToAction("Index");
+                        return RedirectToAction(nameof(Index));
                     }
+                    else
+                        return NotFound();
                 }
-                else
+                else 
+                {
+                    editCityViewModel = CreateEditCityViewModel(editCityViewModel.CityId);
                     return View(editCityViewModel);
+                }
             }
-            return NotFound();
+            return BadRequest();
+        }
+
+        private EditCityViewModel CreateEditCityViewModel(int cityId)
+        {
+            EditCityViewModel editCityViewModel = null;
+
+            City city = _context.Cities.Find(cityId);
+
+            if (city == null)
+            {
+                return editCityViewModel;
+            }
+            else
+            {
+                editCityViewModel = new EditCityViewModel { CityId = city.ID, CityName = city.CityName, CountryId = city.Country.CountryId, CountryList = new SelectList(_context.Countries, "CountryId", "CountryName", city.Country.CountryId) };
+                return editCityViewModel;
+            }
         }
     }
 }

@@ -38,13 +38,14 @@ namespace MVCWebApp.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddUserToRole(string role, string user)
         {
             var tempUser = await _userManager.FindByIdAsync(user);
 
             IdentityResult result = await _userManager.AddToRoleAsync(tempUser, role);
             if (result.Succeeded)
-                return RedirectToAction("Index");
+                return RedirectToAction(nameof(Index));
 
             //if reached-> error -> create error message to viewmodel
             AddToRoleViewModel model = new AddToRoleViewModel();
@@ -69,6 +70,7 @@ namespace MVCWebApp.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(string name)
         {
             string errorMessage = "";
@@ -77,7 +79,7 @@ namespace MVCWebApp.Controllers
             {
                 IdentityResult result = await _roleManager.CreateAsync(new IdentityRole(name));
                 if (result.Succeeded)
-                    return RedirectToAction("Index");
+                    return RedirectToAction(nameof(Index));
                 else
                     if (result.Errors.Any())
                 {

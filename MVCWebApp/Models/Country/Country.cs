@@ -10,6 +10,7 @@ namespace MVCWebApp.Models.Country
     {
         [Key]
         public int CountryId { get; set; }
+        [Required]
         public string CountryName { get; set; }
         public virtual List<City.City> Cities { get; set; }
 

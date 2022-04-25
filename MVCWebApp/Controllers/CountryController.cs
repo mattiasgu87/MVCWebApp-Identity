@@ -32,6 +32,7 @@ namespace MVCWebApp.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult Create(CountryViewModel CreateViewModel)
         {
             if (ModelState.IsValid)
@@ -102,6 +103,7 @@ namespace MVCWebApp.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult Edit(Country country)
         {
 

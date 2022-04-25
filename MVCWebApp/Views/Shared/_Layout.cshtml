@@ -33,18 +33,21 @@
             <li class="linavigation">
                 @Html.ActionLink("Ajax", "Index", "Ajax")
             </li>
-            <li class="linavigation">
-                @Html.ActionLink("Country", "Index", "Country")
-            </li>
-            <li class="linavigation">
-                @Html.ActionLink("City", "Index", "City")
-            </li>
-            <li class="linavigation">
-                @Html.ActionLink("Language", "Index", "Language")
-            </li>
-            <li class="linavigation">
-                @Html.ActionLink("Role", "Index", "Role")
-            </li>
+            @if (User.IsInRole("admin"))
+            {
+                <li class="linavigation">
+                    @Html.ActionLink("Country", "Index", "Country")
+                </li>
+                <li class="linavigation">
+                    @Html.ActionLink("City", "Index", "City")
+                </li>
+                <li class="linavigation">
+                    @Html.ActionLink("Language", "Index", "Language")
+                </li>
+                <li class="linavigation">
+                    @Html.ActionLink("Role", "Index", "Role")
+                </li>
+            }
             <li>
                 <partial name="_LoginPartial" />
             </li>

@@ -107,21 +107,26 @@ namespace MVCWebApp.Controllers
         [HttpPost]
         public IActionResult Edit(EditCityViewModel editCityViewModel)
         {
-            //måste ha riktigt id på countries annars går det inte att ändra namnet..
             if (editCityViewModel != null)
             {
-                City city = _context.Cities.Find(editCityViewModel.CityId);
-
-                if (city != null)
+                if (ModelState.IsValid)
                 {
-                    city.CityName = editCityViewModel.CityName;
-                    city.Country = _context.Countries.Find(editCityViewModel.CountryId);
 
-                    _context.Entry(city).State = EntityState.Modified;
-                    _context.SaveChanges();
+                    City city = _context.Cities.Find(editCityViewModel.CityId);
 
-                    return RedirectToAction("Index");
+                    if (city != null)
+                    {
+                        city.CityName = editCityViewModel.CityName;
+                        city.Country = _context.Countries.Find(editCityViewModel.CountryId);
+
+                        _context.Entry(city).State = EntityState.Modified;
+                        _context.SaveChanges();
+
+                        return RedirectToAction("Index");
+                    }
                 }
+                else
+                    return View(editCityViewModel);
             }
             return NotFound();
         }
